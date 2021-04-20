@@ -1,8 +1,13 @@
 package com.serbladev.tipcalculator
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.serbladev.tipcalculator.databinding.ActivityMainBinding
 import java.text.NumberFormat
 import kotlin.math.ceil
@@ -18,14 +23,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.calculateBtn.setOnClickListener { calculateTip() }
+
+        // Aquí llamamos al método creado al final de MainActivity para que el teclado se cierre al pulsar una keyCode
+        // (en este caso la tecla ENTER)
+
+        binding.costOfServiceTiet.setOnKeyListener { view, keyCode, _ -> handleKeyEvent(view, keyCode)
+        }
+
+
     }
 
     private fun calculateTip() {
-        val stringInTextField = binding.costOfServiceEt.text.toString()
+        val stringInTextField = binding.costOfServiceTiet.text.toString()
 
         // Para que toDouble() funcione, necesitamos convertir el texto 'editable' del EditText a String, por eso le metemos el toString()
         // ACTUALIZACIÓN:
-        // Si dejabamos toDouble() la app crasheaba si el usuario no introucía ningun valor en el EditText, para evitar eso lo cambiamos por
+        // Si dejabamos toDouble() la app crasheaba si el usuario no introducía ningun valor en el EditText, para evitar eso lo cambiamos por
         // toDoubleOrNull() y creamos una estructura de control mediante if...else para comprobar si el usuario ha introducido o no algun valor.
         val cost = stringInTextField.toDoubleOrNull()
 
@@ -64,4 +77,19 @@ class MainActivity : AppCompatActivity() {
         binding.tipResultTv.text = getString(R.string.tip_amount, formattedTip)
     }
 
+    //Éste método permite que el teclado se oculte cuando se presione la tecla Enter.
+    private fun handleKeyEvent(view: View, keyCode: Int): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            // Hide the keyboard
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+            return true
+        }
+        return false
+    }
+
 }
+
+
+

@@ -17,6 +17,11 @@ android {
         versionCode 1
         versionName "1.0"
 
+        //Aunque no lo necesitamos, ya que es un proyecto hecho para versiones de API 30 o superior,
+        //si la hubiéramos hecho para APIs menores a 21, los iconos dentro de la app no se verían.
+        // Para evitar esto usaríamos la siguiente frase:
+        vectorDrawables.useSupportLibrary = true
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
